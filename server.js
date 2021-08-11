@@ -26,7 +26,6 @@ useFindAndModify: false});
 
 app.get("/api/workouts", (req, res) => {
   db.Workout.find({})
-  .populate('exercises')
     .then(dbWorkout => {
       res.json(dbWorkout);
     })
@@ -35,31 +34,21 @@ app.get("/api/workouts", (req, res) => {
     });
 });
 
-app.get("/api/exercises", (req, res) => {
-  db.Exercise.find({})
-  // .populate('exercises')
-    .then(dbExercise => {
-      res.json(dbExercise);
-    })
-    .catch(err => {
-      res.json(err);
-    });
-});
-
 app.post("/api/workouts/:id", (req, res) => {
-  db.Exercise.create(body)
-  .then(({ _id }) => db.Workout.findOneAndUpdate({}, { $push: { exercises: _id }}, {new: true}))
-    .then(dbExercise => {
+  db.Workout.findByIdAndUpdate(req.params.id, {
+    $push: { exercises: req.body }
+  }, {safe: true, upsert: true, new: true})
+    .then((dbExercise) => {
       res.json(dbExercise);
     })
-    .catch(err => {
+    .catch((err) => {
       res.json(err);
     });
 });
 
 app.post("/api/workouts", ({ body }, res) => {
+  console.log(body);
   db.Workout.create(body)
-    // .then(({ _id }) => db.User.findOneAndUpdate({}, { $push: { exercises: _id } }, { new: true }))
     .then(workout => {
       res.json(workout);
     })
@@ -70,8 +59,8 @@ app.post("/api/workouts", ({ body }, res) => {
 
 app.get("/api/workouts/range", (req, res) => {
   db.Workout.find({})
-    .then(dbUser => {
-      res.json(dbUser);
+    .then(dbWorkout => {
+      res.json(dbWorkout);
     })
     .catch(err => {
       res.json(err);
