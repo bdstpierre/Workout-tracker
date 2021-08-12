@@ -1,9 +1,22 @@
 const router = require("express").Router();
 const Workout = require("../models/Workout.js");
 
-
+// Route to retrieve workouts
 router.get("/workouts", (req, res) => {
-    Workout.find({})
+  // Retrieve workout data, aggregating exercise duration into a field named totalDuration
+    Workout.aggregate([
+      {
+        "$sort": {
+          'day': 1
+        }
+      }, {
+        "$addFields": {
+          'totalDuration': {
+            "$sum": '$exercises.duration'
+          }
+        }
+      }
+    ])
       .then((dbWorkout) => {
         res.status(200).json(dbWorkout);
       })
@@ -12,7 +25,8 @@ router.get("/workouts", (req, res) => {
       });
   });
   
-  router.post("/workouts/:id", (req, res) => {
+  // Route to add an exercise to a workout
+  router.put("/workouts/:id", (req, res) => {
     Workout.findByIdAndUpdate(req.params.id, {
       $push: { exercises: req.body }
     })
@@ -24,6 +38,7 @@ router.get("/workouts", (req, res) => {
       });
   });
   
+  // Route to create a new workout
   router.post("/workouts", (req, res) => {
     Workout.create(req.body)
       .then((workout) => {
@@ -34,8 +49,28 @@ router.get("/workouts", (req, res) => {
       });
   });
   
+  // Route to return a range of workouts
+  // Exercise duration is aggregated to totalDuration
   router.get("/workouts/range", (req, res) => {
-    Workout.find({})
+    Workout.aggregate([
+      {
+        "$sort": {
+          "day": -1
+        }
+      }, {
+        "$limit": 7
+      }, {
+        "$addFields": {
+          "totalDuration": {
+            "$sum": "$exercises.duration"
+          }
+        }
+      },{
+        "$sort": {
+          "day": 1
+        }
+      }
+    ])
       .then((dbWorkout) => {
         res.status(200).json(dbWorkout);
       })
