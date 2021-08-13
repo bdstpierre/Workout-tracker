@@ -45,7 +45,7 @@ router.get("/workouts", (req, res) => {
         res.status(200).json(workout);
       })
       .catch((err) => {
-        res.status(400).workoutjson(err);
+        res.status(400).json(err);
       });
   });
   
