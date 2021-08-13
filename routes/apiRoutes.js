@@ -6,13 +6,13 @@ router.get("/workouts", (req, res) => {
   // Retrieve workout data, aggregating exercise duration into a field named totalDuration
     Workout.aggregate([
       {
-        "$sort": {
+        '$sort': {
           'day': 1
         }
       }, {
-        "$addFields": {
+        '$addFields': {
           'totalDuration': {
-            "$sum": '$exercises.duration'
+            '$sum': '$exercises.duration'
           }
         }
       }
@@ -54,20 +54,20 @@ router.get("/workouts", (req, res) => {
   router.get("/workouts/range", (req, res) => {
     Workout.aggregate([
       {
-        "$sort": {
-          "day": -1
+        '$sort': {
+          'day': -1
         }
       }, {
-        "$limit": 7
+        '$limit': 7
       }, {
-        "$addFields": {
-          "totalDuration": {
-            "$sum": "$exercises.duration"
+        '$addFields': {
+          'totalDuration': {
+            '$sum': '$exercises.duration'
           }
         }
       },{
-        "$sort": {
-          "day": 1
+        '$sort': {
+          'day': 1
         }
       }
     ])
