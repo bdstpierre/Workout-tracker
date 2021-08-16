@@ -4,7 +4,7 @@
 
 This app was created to learn how to work with MongoDB and Mongoose.  This app is a fitness tracker that allows the user to enter a new workout (or continue the current one) and add exercises of two types: Resitance or Cardio. The App also provides a dashboard that shows the duration in minutes of the last seven workouts and the weight totals for the last seven workouts.  I learned how to set up Models using Mongoose and how to use the aggregrate function to sum the durations of each exercise into a totalDuration field.
 
-![https://workout-tracker-bdstpierre.herokuapp.com/](https://workout-tracker-bdstpierre.herokuapp.com/)
+[https://workout-tracker-bdstpierre.herokuapp.com/](https://workout-tracker-bdstpierre.herokuapp.com/)
 
 ![Screenshot of the application home page](./Assets/Images/home.png)
 
